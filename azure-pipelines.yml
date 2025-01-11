@@ -1,0 +1,26 @@
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+- job: deploy_main
+  displayName: Deploy to Production
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
+  steps:
+  - task: vercel-deployment-task@1
+    inputs:
+      vercelProjectId: 'prj_Q2rbOklGbxUI6Jtw4Fxkyd2VTyfY'
+      vercelOrgId: 'team_PmRpEHJAEQIoxJl9SnZvIYbL'
+      vercelToken: $(VERCEL_TOKEN)
+      production: true
+      vercelCWD: ./frontend
+
+- job: deploy_develop
+  displayName: Deploy to Preview
+  steps:
+  - task: vercel-deployment-task@1
+    inputs:
+      vercelProjectId: 'prj_Q2rbOklGbxUI6Jtw4Fxkyd2VTyfY'
+      vercelOrgId: 'team_PmRpEHJAEQIoxJl9SnZvIYbL'
+      vercelToken: $(VERCEL_TOKEN)
+      production: false
+      vercelCWD: ./frontend
